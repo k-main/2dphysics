@@ -37,7 +37,7 @@ class Point {
     update_rad(canvas_object_width, canvas_object_height){
         this.radx = this.rad
         this.rady = this.rad
-        
+
         if (canvas_object_width != canvas_object_height) {
             this.rady = this.rady * (canvas_object_width / canvas_object_height)
             this.radx = this.radx * (canvas_object_width / canvas_object_height)
@@ -59,24 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
 
-    function draw_pt(point, visible=true) {
-        const c_theta0 = 0
-        const c_theta1 = 2 * Math.PI
+    function drawpt(x, y, radx, rady, color, visible=true){
 
-        let radx = point.radx, rady = point.rady
-        let color = point.color
-        canvas.beginPath()
         if (visible == false) {
             radx += 1
             rady += 1
             color = 'white'
         }
-
         canvas.fillStyle = color
-        canvas.ellipse(point.x, cartesian_y(point.y, canvas_object.height), radx, rady, 0, c_theta0, c_theta1, false);
+        canvas.ellipse(x, cartesian_y(y, canvas_object.height), radx, rady, 0, 0, 2*Math.PI, false)
         canvas.fill()
     }
-
+    
     const c_rad = 10
     var ratio = 1
     var c_radx = c_rad
@@ -108,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     function simulate(){
-        draw_pt(p, false)
+        drawpt(p.x, p.y, p.radx, p.rady, p.color, false)
         var current_inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
 
         if (current_inner_dimensions != inner_dimensions) {
@@ -141,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         p.v_y = p.v_y + a_y*dt
         
-        draw_pt(p)
+        drawpt(p.x, p.y, p.radx, p.rady, p.color)
         requestAnimationFrame(simulate)
     }
 
