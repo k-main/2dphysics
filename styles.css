@@ -12,11 +12,20 @@
 
 #Window {
     border: 1px solid black;
+    height: 40%;
+    width: 80%;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (min-width: 800px) {
     #Window {
         height: 40%;
-        width: 80%;
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    #Window {
+        height: 50%;
+        width: 50%;
     }
 }
