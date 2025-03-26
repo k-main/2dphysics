@@ -12,17 +12,70 @@ function cartesian_y(canvas_y, canvas_height){
     return (canvas_height - canvas_y)
 }
 
+class Point {
+    mass;
+    x;
+    y;
+    v_x;
+    v_y;
+    rad;
+    color;
+    radx;
+    rady;
+
+    constructor(mass, x, y, rad, color, v_x, v_y, canvw, canvh) {
+        this.mass
+        this.x = x
+        this.y = y
+        this.v_x = v_x
+        this.v_y = v_y
+        this.rad = rad
+        this.color = color
+        this.update_rad(canvw, canvh)
+    }
+
+    update_rad(canvas_object_width, canvas_object_height){
+        this.radx = this.rad
+        this.rady = this.rad
+        if (canvas_object_width > canvas_object_height) {
+            this.radx = this.radx * (canvas_object_width / canvas_object_height)
+        } else if (canvas_object_height > canvas_object_width) {
+            this.rady = this.rady * (canvas_object_height / canvas_object_width)
+        }
+    }
+
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     var canvas_object = document.getElementById("Window")
     var paused = false
     const canvas = canvas_object.getContext("2d")
     console.log(`Screen inner width: ${window.innerWidth}, inner height: ${window.innerHeight}`)
-    console.log(`Canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
 
     var viewport_dm = set_viewport_dm(window.innerWidth, window.innerHeight)
     canvas_object.width = viewport_dm.width;
     canvas_object.height = viewport_dm.height;
     console.log(`New canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
+
+    var canvas_dimensions = {"width" : canvas_object.width, "height" : canvas_object.height}
+
+    function draw_pt(point, visible=true) {
+        const c_theta0 = 0
+        const c_theta1 = 2 * Math.PI
+
+        let radx = point.radx, rady = point.rady
+        let color = point.color
+        canvas.beginPath()
+        if (visible == false) {
+            radx += 1
+            rady += 1
+            color = 'white'
+        }
+
+        canvas.fillStyle = color
+        canvas.ellipse(point.x, cartesian_y(point.y, canvas_object.height), radx, rady, 0, c_theta0, c_theta1, false);
+        canvas.fill()
+    }
 
     const c_rad = 10
     var ratio = 1
@@ -37,60 +90,49 @@ document.addEventListener("DOMContentLoaded", () => {
         c_rady = c_rady * ratio
     }
 
-    var c_x = (canvas_object.width / 2)
-    var c_y = (canvas_object.height / 2)
-    const c_rot     = 0
-    const c_theta0  = 0
-    const c_theta1  = 2 * Math.PI
-    const c_drawdir = false
 
-    canvas.beginPath()
-    canvas.ellipse(c_x, cartesian_y(c_y, canvas_object.height), c_radx, c_rady, c_rot, c_theta0, c_theta1, c_drawdir)
-    canvas.fillStyle = 'red'
-    canvas.fill()
-
-    var v_x = 20
-    var v_y = 2
     var a_y = -9.8
-    var a_x = -1
     const dt  = 0.1
     
-    canvas.clearRect(c_x - c_rad, cartesian_y(c_y, canvas_object.height) - c_rad, 2*c_rad, 2*c_rad)
+    const p = new Point(
+        1,
+        (canvas_object.width / 2),
+        (canvas_object.height / 2),
+        c_rad,
+        'red',
+        20,
+        2,
+        canvas_object.width,
+        canvas_object.height
+    )
+    
 
     function simulate(){
-        // canvas.clearRect(c_x - c_rad - 4, cartesian_y(c_y, canvas_object.height) - c_rad - 4, 2*c_rad, 2*c_rad)
+        draw_pt(p, false)
 
-        canvas.beginPath()
-        canvas.ellipse(c_x, cartesian_y(c_y, canvas_object.height), c_radx + 1, c_rady + 1, c_rot, c_theta0, c_theta1, c_drawdir)
-        canvas.fillStyle = 'white'
-        canvas.fill()
-
-        c_x = c_x + v_x*dt
-        c_y = c_y + v_y*dt
-        if (c_x >= canvas_object.width) {
-            v_x = -v_x
-            c_x = canvas_object.width - 1
+        p.x = p.x + p.v_x*dt
+        p.y = p.y + p.v_y*dt
+        if (p.x >= canvas_object.width) {
+            p.v_x = -p.v_x
+            p.x = canvas_object.width - 1
         }
-        if (c_x <= 0) {
-            v_x = -v_x
-            c_x = 0
+        if (p.x <= 0) {
+            p.v_x = -p.v_x
+            p.x = 0
         }
 
-        if (c_y >= canvas_object.height){
-            v_y = -v_y
-            c_y = canvas_object.height
+        if (p.y>= canvas_object.height){
+            p.v_y = -p.v_y
+            p.y = canvas_object.height
         }
-        if (c_y <= 0){
-            v_y = -v_y
-            c_y = 0
+        if (p.y <= 0){
+            p.v_y = -p.v_y
+            p.y = 0
         }
 
-        // v_x = ~ no acceleration in the x direction
-        v_y = v_y + a_y*dt
-        canvas.beginPath()
-        canvas.ellipse(c_x, cartesian_y(c_y, canvas_object.height), c_radx, c_rady, c_rot, c_theta0, c_theta1, c_drawdir)
-        canvas.fillStyle = 'red'
-        canvas.fill()
+        p.v_y = p.v_y + a_y*dt
+        
+        draw_pt(p)
         requestAnimationFrame(simulate)
     }
 
