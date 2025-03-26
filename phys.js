@@ -1,6 +1,6 @@
-function set_viewport_dm(inner_w, inner_h){
+function get_canvas_dm(inner_w, inner_h){
     if (inner_w >= 1280) {
-        return {"width": 500, "height": 500}
+        return {"width": 600, "height": 500}
     }
     if (inner_w >= 800) {
         return {"width": 320, "height": 560}
@@ -37,10 +37,10 @@ class Point {
     update_rad(canvas_object_width, canvas_object_height){
         this.radx = this.rad
         this.rady = this.rad
-        if (canvas_object_width > canvas_object_height) {
+        
+        if (canvas_object_width != canvas_object_height) {
+            this.rady = this.rady * (canvas_object_width / canvas_object_height)
             this.radx = this.radx * (canvas_object_width / canvas_object_height)
-        } else if (canvas_object_height > canvas_object_width) {
-            this.rady = this.rady * (canvas_object_height / canvas_object_width)
         }
     }
 
@@ -52,12 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = canvas_object.getContext("2d")
     console.log(`Screen inner width: ${window.innerWidth}, inner height: ${window.innerHeight}`)
 
-    var viewport_dm = set_viewport_dm(window.innerWidth, window.innerHeight)
-    canvas_object.width = viewport_dm.width;
-    canvas_object.height = viewport_dm.height;
+    var canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
+    canvas_object.width = canvas_dm.width;
+    canvas_object.height = canvas_dm.height;
     console.log(`New canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
 
-    var canvas_dimensions = {"width" : canvas_object.width, "height" : canvas_object.height}
+    var inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
 
     function draw_pt(point, visible=true) {
         const c_theta0 = 0
@@ -109,6 +109,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function simulate(){
         draw_pt(p, false)
+        var current_inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
+
+        if (current_inner_dimensions != inner_dimensions) {
+            canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
+            canvas_object.width = canvas_dm.width;
+            canvas_object.height = canvas_dm.height;
+            console.log(`New canvas dimensions: ${canvas_dm.width} by ${canvas_dm.height}`)
+            p.update_rad(canvas_object.width, canvas_object.height)
+        }
 
         p.x = p.x + p.v_x*dt
         p.y = p.y + p.v_y*dt
