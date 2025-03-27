@@ -1,9 +1,12 @@
 function get_canvas_dm(inner_w, inner_h){
+    if (inner_w >= 1440) {
+        return {"width": 700, "height": 500}
+    }
     if (inner_w >= 1280) {
         return {"width": 600, "height": 500}
     }
     if (inner_w >= 800) {
-        return {"width": 320, "height": 560}
+        return {"width": 600, "height": 400}
     }
     return {"width": inner_w * 0.8, "height": inner_h * 0.4}
 } 
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas_object.height = canvas_dm.height;
     console.log(`New canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
 
-    var inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
+    var inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
 
     function drawpt(x, y, radx, rady, color, visible=true){
         if (visible == false) {
@@ -79,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         1,
         (canvas_object.width / 2),
         (canvas_object.height / 2),
-        10,
+        20,
         'red',
         20,
         2,
@@ -125,13 +128,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     points = [p0, p1, p2, p3]
 
-    var current_inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
+    var current_inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
     function simulate(){
         canvas.fillStyle = 'white'
         canvas.fillRect(0, 0, canvas_object.width, canvas_object.height)
-        current_inner_dimensions = {"width" : window.innerWidth, "height" : window.innerHeight}
+        current_inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
 
-        if (current_inner_dimensions != inner_dimensions) {
+        if (current_inner_dm.width != inner_dm.width || current_inner_dm.height != inner_dm.height) {
             canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
             canvas_object.width = canvas_dm.width;
             canvas_object.height = canvas_dm.height;
@@ -139,35 +142,33 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 0; i < points.length; i++) {
                 points[i].update_rad(canvas_object.width, canvas_object.height)
             }
+            inner_dm = current_inner_dm
         }
         
         for (let i = 0; i < points.length; i++) {
 
             points[i].x = points[i].x + points[i].v_x*dt
             points[i].y = points[i].y + points[i].v_y*dt
-            if (points[i].x >= canvas_object.width) {
+            
+            if (points[i].x + points[i].rad >= canvas_object.width) {
                 points[i].v_x = -points[i].v_x
-                points[i].x = canvas_object.width - 1
+                points[i].x = canvas_object.width - points[i].rad
             }
-            if (points[i].x <= 0) {
+            if (points[i].x - points[i].rad <= 0) {
                 points[i].v_x = -points[i].v_x
-                points[i].x = 0
+                points[i].x = points[i].rad
             }
 
-            if (points[i].y>= canvas_object.height){
+            if (points[i].y + points[i].rad >= canvas_object.height){
                 points[i].v_y = -points[i].v_y
-                points[i].y = canvas_object.height
+                points[i].y = canvas_object.height - points[i].rad
             }
-            if (points[i].y <= 0){
+            if (points[i].y - points[i].rad <= 0){
                 points[i].v_y = -points[i].v_y
-                points[i].y = 0
+                points[i].y = points[i].rad
             }
 
             points[i].v_y = points[i].v_y + a_y*dt
-            // drawpt(points[i].x, points[i].y, points[i].radx, points[i].rady, points[i].color)
-        }
-
-        for (let i = 0; i < points.length; i++) {
             drawpt(points[i].x, points[i].y, points[i].radx, points[i].rady, points[i].color)
         }
 
