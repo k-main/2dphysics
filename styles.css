@@ -18,7 +18,6 @@
     width: 80%;
 }
 
-
 #entityForm {
     display: flex;
     flex-direction: column;
@@ -56,6 +55,8 @@
     padding: 5%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 50%;
 }
 
 #Controls {
@@ -69,6 +70,15 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.entity {
+    display: flex;
+    flex-direction: row;
+}
+
+.entity > * {
+    margin-right: 6px;
 }
 
 @media screen and (min-width: 800px){

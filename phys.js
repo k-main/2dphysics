@@ -128,6 +128,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     points = [p0, p1, p2, p3]
 
+    var innerHTML = document.getElementById("entityList").innerHTML
+    for (var i = 0; i < points.length; i++){
+        let velocity = (points[i].v_x ** 2.0 + points[i].v_y ** 2.0) ** 0.5
+        innerHTML += ` <div class="entity"> <div> Particle ${i}: </div> <div id="v${i}"> ${Math.round(velocity)} m/s </div> </div>`
+    }
+    document.getElementById("entityList").innerHTML = innerHTML
+
     var current_inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
     function simulate(){
         canvas.fillStyle = 'white'
