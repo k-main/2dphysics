@@ -12,20 +12,107 @@
 
 #Window {
     border: 1px solid black;
-    /* height: 40%;
-    width: 80%; */
 }
 
-/* @media screen and (min-width: 800px) {
-    #Window {
-        height: 40%;
-        width: 70%;
+#simParams {
+    width: 80%;
+}
+
+
+#entityForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#entityForm > * {
+    margin-top: 3%;
+}
+
+#params >* {
+    margin-top: 3%;
+}
+
+.Button {
+    padding: 6px;
+
+}
+
+#params {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+}
+
+.settingHeader {
+    font-weight: bold;
+    padding-top: 8px;
+}
+
+.settingDesc{
+    margin-bottom: 8%;
+}
+
+#entityList {
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+#Controls {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+#simContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media screen and (min-width: 800px){
+    #simParams{
+        width: 60%;
     }
 }
 
-@media screen and (min-width: 1280px) {
-    #Window {
-        height: 50%;
+@media screen and (min-width: 1280px){
+    #simParams{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    #simParams > *{
+        padding: 0% 5%;
+        padding-bottom: 5%;
+    }
+
+    #entityList{
+        padding: 2%;
+    }
+}
+
+@media screen and (min-width: 1440px){
+    #simParams {
         width: 50%;
     }
-} */
+    #Controls {
+        margin-top: 3%;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    #entityList {
+        height:87%;
+        padding-top: 0%;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    #entityList {
+        height: 80%;
+        padding-right: 0px;
+    }
+}
