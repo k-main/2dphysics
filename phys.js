@@ -2,6 +2,12 @@ var points
 var frame_i = 0
 var canvas_object
 var tasks = []
+/* Sim Params */
+var air_res_coeff = 0
+var a_y = -9.8
+var dt = 0.1
+var suspend = false
+
 class Task {
     period;
     constructor(period, exec_func) {
@@ -120,6 +126,43 @@ function delete_pt(id){
     }
 
 }
+
+function toggle_air_res(){
+    let value = 0.00001
+    air_res_coeff = (air_res_coeff == value) ? 0 : value
+}
+
+function toggle_g(){
+    a_y = (a_y == 0) ? -9.81 : 0
+}
+
+function agitate(){
+    for (var i = 0; i < points.length; i++){
+        // try catch in case of deletion during loop iteration
+        try {
+            let c = points[i].color
+            points[i].color = 'black'
+            points[i].v_x += Math.floor(Math.random() * 100)
+            points[i].v_y += Math.floor(Math.random() * 100)
+            points[i].color = c
+        } catch (error) {
+            console.log(`Error modifying point values, recently deleted? ${error}`)
+        }
+    }
+}
+
+function suspend_sim(){
+    var pause_btn = document.getElementById('pause')
+    if (suspend) {
+        dt = 0
+        pause_btn.innerHTML = "Resume"
+        suspend = false
+    } else {
+        dt = 0.1
+        pause_btn.innerHTML = "Pause"
+        suspend = true
+    }
+}
 /* Periodic Task Definitions */
 const TASKS_GCD = 10;
 function update_v(){
@@ -142,10 +185,11 @@ tasks.push(update_velocity)
 
 document.addEventListener("DOMContentLoaded", () => {
     //Input Event Listeners
-    document.getElementById('createPt').addEventListener('click', (event) => {
-        event.preventDefault()
-        create_pt()
-    })
+    document.getElementById('createPt').addEventListener('click', (e) => { e.preventDefault(); create_pt() })
+    document.getElementById('air-res').addEventListener('click', (e) => { e.preventDefault(); toggle_air_res() })
+    document.getElementById('gravity').addEventListener('click', (e) => { e.preventDefault(); toggle_g() })
+    document.getElementById('agitate').addEventListener('click', (e) => { e.preventDefault(); agitate() })
+    document.getElementById('pause').addEventListener('click', (e) => { e.preventDefault(); suspend_sim() })
 
     canvas_object = document.getElementById("Window")
     const canvas = canvas_object.getContext("2d")
@@ -170,9 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
         canvas.fill()
         canvas.closePath()
     }
-    
-    var a_y = -9.8
-    const dt  = 0.1
     
     const p0 = new Point( 0, (canvas_object.width / 2), (canvas_object.height / 2), 20, 'blue', 20, -20, canvas_object.width, canvas_object.height)
     const p1 = new Point( 1, (canvas_object.width / 2), (canvas_object.height / 2), 5, 'orange', 50, 20, canvas_object.width, canvas_object.height)
@@ -255,7 +296,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 points[i].y = points[i].rad
             }
 
-            points[i].v_y = points[i].v_y + a_y*dt
+            let air_res = air_res_coeff*(Math.PI * points[i].rad)
+            points[i].v_y = (points[i].v_y) + a_y*dt - air_res*points[i].v_y
+            points[i].v_x = (points[i].v_x)          - air_res*points[i].v_x
             drawpt(points[i].x, points[i].y, points[i].radx, points[i].rady, points[i].color)
         }
 
