@@ -128,7 +128,7 @@ function delete_pt(id){
 }
 
 function toggle_air_res(){
-    let value = 0.00001
+    let value = 0.0001
     air_res_coeff = (air_res_coeff == value) ? 0 : value
 }
 
@@ -297,8 +297,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             let air_res = air_res_coeff*(Math.PI * points[i].rad)
-            points[i].v_y = (points[i].v_y) + a_y*dt - air_res*points[i].v_y
-            points[i].v_x = (points[i].v_x)          - air_res*points[i].v_x
+            points[i].v_y = (points[i].v_y) + a_y*dt - air_res*points[i].v_y*dt
+            points[i].v_x = (points[i].v_x)          - air_res*points[i].v_x*dt
             drawpt(points[i].x, points[i].y, points[i].radx, points[i].rady, points[i].color)
         }
 
