@@ -94,7 +94,6 @@ function create_pt(){
     r = (r_f != '') ? Number(r_f) : 10
     c = (c_f != '') ? c_f : 'blue'
 
-    console.log(`Making point: x = ${x}, y = ${y}, Vx = ${Vx}, Vy = ${Vy}, r = ${r}, c = ${c}`)
     const point_id = (points.length != 0) ? points[points.length - 1].id + 1 : 0
     points.push(new Point(point_id, x, y, r, c, Vx, Vy, canvas_object.width, canvas_object.height))
 
@@ -105,7 +104,7 @@ function create_pt(){
                 <div> P${point_id}: </div> 
                 <div id="v${point_id}">  </div> 
             </div>
-            <button id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
+            <button class="del" id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
         </div>
     `
 }
@@ -129,11 +128,25 @@ function delete_pt(id){
 
 function toggle_air_res(){
     let value = 0.0001
-    air_res_coeff = (air_res_coeff == value) ? 0 : value
+    var toggle_btn = document.getElementById('air-res')
+    if (air_res_coeff == value) {
+        toggle_btn.innerHTML = 'Enable Air-Resistance'
+        air_res_coeff = 0
+    } else {
+        toggle_btn.innerHTML = 'Disable Air-Resistance'
+        air_res_coeff = value
+    }
 }
 
 function toggle_g(){
-    a_y = (a_y == 0) ? -9.81 : 0
+    var toggle_btn = document.getElementById('gravity')
+    if (a_y == 0) {
+        a_y = -9.81
+        toggle_btn.innerHTML = "Disable Gravity"
+    } else {
+        a_y = 0
+        toggle_btn.innerHTML = "Enable Gravity"
+    }
 }
 
 function agitate(){
@@ -170,14 +183,18 @@ function update_v(){
         try {
             var v_x = Math.round(points[i].v_x), v_y = Math.round(points[i].v_y)
             let velocity = (v_x ** 2.0 + v_y ** 2.0) ** 0.5
-            document.getElementById(`v${points[i].id}`).innerHTML = `|V| = ${Math.round(velocity)} m/s | v = <${v_x},${v_y}>`
+            document.getElementById(`v${points[i].id}`).innerHTML = 
+            `
+            <div>  |V| = ${Math.round(velocity)} m/s </div>
+            <div> v = <${v_x},${v_y}> </div>
+            `
         } catch (error) {
             console.log(`Error updating point with id ${points[i].id}, ${error}`)
         }
     }
 }
 const update_velocity = new Task(
-    10,
+    50,
     update_v
 )
 
@@ -235,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy}> 
             </div> 
         </div>
-            <button id="del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
+            <button class="del" id="class="del" del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
         </div>`
     }
 
@@ -274,32 +291,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         // Simulation Computations
         for (let i = 0; i < points.length; i++) {
-
-            points[i].x = points[i].x + points[i].v_x*dt
-            points[i].y = points[i].y + points[i].v_y*dt
+            var p_i = points[i]
+            p_i.x = p_i.x + p_i.v_x*dt
+            p_i.y = p_i.y + p_i.v_y*dt
             
-            if (points[i].x + points[i].rad >= canvas_object.width) {
-                points[i].v_x = -points[i].v_x
-                points[i].x = canvas_object.width - points[i].rad
+            if (p_i.x + p_i.rad >= canvas_object.width) {
+                p_i.v_x = -p_i.v_x
+                p_i.x = canvas_object.width - p_i.rad
             }
-            if (points[i].x - points[i].rad <= 0) {
-                points[i].v_x = -points[i].v_x
-                points[i].x = points[i].rad
-            }
-
-            if (points[i].y + points[i].rad >= canvas_object.height){
-                points[i].v_y = -points[i].v_y
-                points[i].y = canvas_object.height - points[i].rad
-            }
-            if (points[i].y - points[i].rad <= 0){
-                if (points[i].v_y != 0) points[i].v_y = -points[i].v_y
-                points[i].y = points[i].rad
+            if (p_i.x - p_i.rad <= 0) {
+                p_i.v_x = -p_i.v_x
+                p_i.x = p_i.rad
             }
 
-            let air_res = air_res_coeff*(Math.PI * points[i].rad)
-            points[i].v_y = (points[i].v_y) + a_y*dt - air_res*points[i].v_y*dt
-            points[i].v_x = (points[i].v_x)          - air_res*points[i].v_x*dt
-            drawpt(points[i].x, points[i].y, points[i].radx, points[i].rady, points[i].color)
+            if (p_i.y + p_i.rad >= canvas_object.height){
+                p_i.v_y = -p_i.v_y
+                p_i.y = canvas_object.height - p_i.rad
+            }
+            if (p_i.y - p_i.rad <= 0){
+                if (p_i.v_y != 0) p_i.v_y = -p_i.v_y
+                p_i.y = p_i.rad
+            }
+
+            let air_res = air_res_coeff*(Math.PI * p_i.rad)
+            p_i.v_y = (p_i.v_y) + a_y*dt - air_res*p_i.v_y*dt
+            p_i.v_x = (p_i.v_x)          - air_res*p_i.v_x*dt
+            drawpt(p_i.x, p_i.y, p_i.radx, p_i.rady, p_i.color)
+            points[i] = p_i
         }
 
         requestAnimationFrame(simulate)
