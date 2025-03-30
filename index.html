@@ -10,37 +10,43 @@
 <body>
     <div class="container">
         <div id="pageHeading">2-Dimensional Physics Simulator</div>
-        <canvas id="Window"></canvas>
+            <div id="windowEntity">
+                <canvas id="Window"></canvas>
+                
+                <div id="entityList">
+                    <p class="settingHeader">Entities</p>
+                </div>
+            </div>
 
-        <div id="entityList">
-                <p class="settingHeader">Entities</p>
+        <div id="paramsAndEntity">
+            <form id="params">
+                <div class="settingHeader">Simulation Parameters</div>
+                <button id="air-res" class="Button"> Toggle Air-Resistance </button>
+                <button id="gravity" class="Button"> Toggle Gravity </button>
+                <button id="agitate" class="Button"> Agitate Simulation </button>
+                <button id="pause" class="Button">Pause</button>
+            </form>
+
+            <form id="entityForm">
+                <div class="settingHeader">Create Point-Mass</div>
+                <div class="settingDesc">Leave blank to use default</div>
+                <label for="origin"> Starting X Position </label>
+                <input type="text" class="textentry" id="x0" name="origin"> 
+                <label for="origin"> Starting Y Position </label>
+                <input type="text" class="textentry" id="y0" name="origin"> 
+                <label for="v_x"> Horizontal Velocity (Vx) </label>
+                <input type="text" class="textentry" id="v_x" name="v_x"> 
+                <label for="v_y"> Verticle Velocity (Vy) </label>
+                <input type="text" class="textentry" id="v_y" name="v_y"> 
+                <label for="radius"> Radius </label>
+                <input type="text" class="textentry" id="radius" name="radius"> 
+                <label for="color"> Color </label>
+                <input type="text" class="textentry" id="color" name="color"> 
+                <button id="createPt" class="Button" type="submit"> Create </button>
+            </form>
         </div>
 
-        <div id="simParams"> 
-                <form id="entityForm">
-                    <div class="settingHeader">Point-Mass Parameters</div>
-                    <div class="settingDesc">Leave blank to use default</div>
-                    <label for="v_x"> Horizontal Velocity (Vx) </label>
-                    <input type="text" id="v_x" name="v_x"> 
-                    <label for="v_y"> Verticle Velocity (Vy) </label>
-                    <input type="text" id="v_y" name="v_y"> 
-                    <label for="radius"> Radius </label>
-                    <input type="text" id="radius" name="radius"> 
-                    <label for="origin"> Starting X Position </label>
-                    <input type="text" id="x0" name="origin"> 
-                    <label for="origin"> Starting Y Position </label>
-                    <input type="text" id="y0" name="origin"> 
-                    <button class="Button"> Create </button>
-                </form>
 
-                <form id="params">
-                    <div class="settingHeader">Simulation Parameters</div>
-                    <button id="air-res" class="Button"> Toggle Air-Resistance </button>
-                    <button id="gravity" class="Button"> Toggle Gravity </button>
-                    <button is="agitate" class="Button"> Agitate Simulation </button>
-                </form>
-
-        </div>
     </div>
 </body>
 </html>

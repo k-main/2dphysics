@@ -3,11 +3,17 @@
     flex-direction: column;
     align-items: center;
     font-family: 'Courier New', Courier, monospace;
-    height: 100vh;
+    height: 90vh;
+    width: 100%;
 }
 
 #pageHeading {
     padding: 20px;
+}
+
+#windowEntity {
+    display: flex;
+    flex-direction: column;
 }
 
 #Window {
@@ -18,28 +24,50 @@
     width: 80%;
 }
 
+#paramsAndEntity{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#paramsAndEntity > * {
+    margin-bottom: 5%;
+}
+
 #entityForm {
     display: flex;
     flex-direction: column;
+    width: 90%;
 }
 
 #entityForm > * {
-    margin-top: 3%;
+    margin-top: 2%;
+    padding: 2%;
 }
 
-#params >* {
-    margin-top: 3%;
+#createPt {
+    margin-top: 6%;
+    margin-bottom: 6%;
+    padding: 4%;
 }
 
 .Button {
     padding: 6px;
+    margin-bottom: 15px;
 
 }
 
 #params {
     display: flex;
     flex-direction: column;
-    margin-bottom: 5%;
+    margin-top: 4%;
+    width: 90%;
+}
+
+#params > * {
+    margin: 3% 0%;
+    padding: 4%;
 }
 
 .settingHeader {
@@ -52,77 +80,152 @@
 }
 
 #entityList {
-    padding: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
-}
-
-#Controls {
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    align-items: center;
+    height: auto;
 }
 
-#simContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
 
 .entity {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 50%;
+    padding: 2%;
+    margin: 4px 0px;
+    border-radius: 3px;
+}
+
+.entity:hover {
+    background-color: grey;
 }
 
 .entity > * {
     margin-right: 6px;
 }
 
+.entityData {
+    display: flex;
+    flex-direction: column;
+}
+
+.del {
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 @media screen and (min-width: 800px){
-    #simParams{
+    #windowEntity {
+        align-items: center;
+
+    }
+
+
+    #windowEntity > * {
+        .settingHeader {
+            padding-top: 0px;
+            margin-top: 0px;
+        }
+    }
+
+    #paramsAndEntity {
+        width: 100%;
+    }
+
+    #entityForm{
+        margin-top: 4%;
         width: 60%;
     }
+
+    #entityForm >* {
+        margin: 0%;
+    }
+
+    #entityList{
+        width: 75%;
+        margin-top: 5%;
+    }
+
+
+    .entity {
+        border: #e1e1e1 solid 1px;
+    }
+
+    .del {
+        padding: 2px 8px;
+    }
+
+    #createPt {
+        margin-top: 4%;
+    }
+
+    #params {
+        width: 60%;
+    }
+    #params > * {
+        padding: 4%;
+    }
+
 }
 
 @media screen and (min-width: 1280px){
-    #simParams{
-        display: flex;
+
+    #windowEntity {
+        margin-top: 5%;
         flex-direction: row;
-        justify-content: center;
+        width: 80%;
+        height: 60%;
+        max-height: 60%;
+        vertical-align: top;
     }
 
-    #simParams > *{
-        padding: 0% 5%;
-        padding-bottom: 5%;
+    #paramsAndEntity {
+        flex-direction: row;
+        margin-top: 5%;
+        width: 60%;
+    }
+
+    #paramsAndEntity > * {
+        margin: 3%;
+    }
+
+    #params {
+        height: 100%;
     }
 
     #entityList{
         padding: 2%;
+        margin-top: 0%;
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
     }
+
 }
 
 @media screen and (min-width: 1440px){
-    #simParams {
-        width: 50%;
-    }
-    #Controls {
-        margin-top: 3%;
-        flex-direction: row;
-        justify-content: center;
-    }
     
     #entityList {
         height:87%;
         padding-top: 0%;
+        width: 70%;
     }
 }
 
 @media screen and (min-width: 1920px) {
+    #windowEntity {
+        width: 60%;
+        max-width: 60%;
+        margin-top: 2%;
+    }
     #entityList {
         height: 80%;
-        padding-right: 0px;
+        width: 40%;
+    }
+
+    #paramsAndEntity {
+        max-width: 50%;
     }
 }
