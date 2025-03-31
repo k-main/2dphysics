@@ -219,12 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
 
-    function drawpt(x, y, radx, rady, color, visible=true){
-        if (visible == false) {
-            radx += 1
-            rady += 1
-            color = 'white'
-        }
+    function drawpt(x, y, radx, rady, color){
         canvas.beginPath()
         canvas.fillStyle = color
         canvas.ellipse(x, cartesian_y(y, canvas_object.height), radx, rady, 0, 0, 2*Math.PI, false)
