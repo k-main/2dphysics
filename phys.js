@@ -1,4 +1,5 @@
 var points
+var point_map = new Map()
 var frame_i = 0
 var canvas_object
 var tasks = []
@@ -7,6 +8,9 @@ var air_res_coeff = 0
 var a_y = -9.8
 var dt = 0.1
 var suspend = false
+
+var collision_map = new Map()
+var grid_x, grid_y
 
 class Task {
     period;
@@ -25,6 +29,7 @@ class Task {
 
 class Point {
     id;
+    mass;
     x;
     y;
     v_x;
@@ -33,7 +38,10 @@ class Point {
     color;
     radx;
     rady;
-    constructor(id, x, y, rad, color, v_x, v_y, canvw, canvh) {
+    grid_x;
+    grid_y;
+    cell_id;
+    constructor(id, x, y, rad, color, v_x, v_y, canvw, canvh, mass=-1) {
         this.id = id
         this.x = x
         this.y = y  
@@ -42,6 +50,8 @@ class Point {
         this.rad = (rad > (canvw / 2) || rad > (canvh / 2)) ? 10 : rad;
         this.color = color
         this.update_rad(canvw, canvh)
+        this.cell_id = -1
+        this.mass = (mass > 0) ? mass : Math.PI * (this.rad ** 2)
 
     }
 
@@ -96,6 +106,7 @@ function create_pt(){
 
     const point_id = (points.length != 0) ? points[points.length - 1].id + 1 : 0
     points.push(new Point(point_id, x, y, r, c, Vx, Vy, canvas_object.width, canvas_object.height))
+    point_map.set(point_id, points.length - 1)
 
     let bg_color = ((points.length - 1) % 2 == 0) ? '#e1e1e1' : 'white'
     document.getElementById('entityList').innerHTML += `
@@ -180,25 +191,122 @@ function suspend_sim(){
 const TASKS_GCD = 10;
 function update_v(){
     for (var i = 0; i < points.length; i++){
+        //${Math.floor(points[i].x / grid_width)},${Math.floor(points[i].y / grid_height)}
         try {
             var v_x = Math.round(points[i].v_x), v_y = Math.round(points[i].v_y)
             let velocity = (v_x ** 2.0 + v_y ** 2.0) ** 0.5
             document.getElementById(`v${points[i].id}`).innerHTML = 
             `
             <div>  |V| = ${Math.round(velocity)} m/s </div>
-            <div> v = <${v_x},${v_y}> </div>
+            <div> v = <${v_x},${v_y}>, x = <${points[i].grid_x},${points[i].grid_y}> = ${points[i].cell_id} </div>
             `
         } catch (error) {
             console.log(`Error updating point with id ${points[i].id}, ${error}`)
         }
     }
 }
-const update_velocity = new Task(
+
+function update_collision_map(){
+    for (var i = 0; i < points.length; i++){
+        try {
+            points[i].grid_x = Math.floor(points[i].x / grid_x)
+            points[i].grid_y = Math.floor(points[i].y / grid_y)
+            var current_cell = Math.floor((10*points[i].grid_x + points[i].grid_y))
+            if (points[i].cell_id != current_cell) {
+                // change in cell, update map
+                if (collision_map.has(points[i].cell_id)) {
+                    var pts = collision_map.get(points[i].cell_id)
+                    for (let p_i = 0; p_i < pts.length; p_i++){
+                        if (pts[p_i] == points[i].id) {
+                            pts.splice(p_i, 1)
+                            if (pts.length > 0) {
+                                collision_map.set(points[i].cell_id, pts)
+                            } else {
+                                collision_map.delete(points[i].cell_id)
+                            }
+                            break;
+                        }
+                    }
+                    points[i].cell_id = current_cell
+                } else {
+                    collision_map.set(current_cell, [points[i].id])
+                    points[i].cell_id = current_cell
+                }
+            }
+        } catch (error) {
+            console.log(`Error updating grid positions ${error}`)
+        }
+    }
+}
+
+function detect_collisions(){
+    for (var i = 0; i < points.length; i++){                   // points[i].length times
+        var p1 = points[i]
+        const nearby_cell_ids = [
+            p1.cell_id + 10 - 1,
+            p1.cell_id + 10,
+            p1.cell_id + 10 + 1,
+            p1.cell_id - 1,
+            p1.cell_id,
+            p1.cell_id + 1,
+            p1.cell_id - 10 - 1,
+            p1.cell_id - 10,
+            p1.cell_id - 10 + 1
+        ]
+
+        for (var c_i = 0; c_i < nearby_cell_ids.length; c_i++){    // 9 times
+            const cell = nearby_cell_ids[c_i]
+            if (cell % 10 > 7 || cell < 0 || cell > 77) continue
+            if (collision_map.has(cell)) {
+                const points_in_cell = collision_map.get(cell)
+                for (var k = 0; k < points_in_cell.length; k++){    // worst: points[i].length, best: 0,  
+                    var pt_id = points_in_cell[k]
+                    if (point_map.has(pt_id)) {
+                        exec_collision(i, point_map.get(pt_id))
+                    }
+                }
+
+            } else {
+                continue
+            }
+        }
+
+    }
+    
+}
+
+function exec_collision(p1_i, p2_i){
+    // var p1 = points[p1_i], p2 = points[p2_i]
+    // const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
+    // const r1 = p1.rad, r2 = p2.rad;
+    // if ((r1 + r2) > d) {
+    //     let p1vx = p1.v_x
+    //     let p1vy = p1.v_y
+    //     p1.v_x += p2.v_x / 2
+    //     p2.v_y += p2.v_y / 2
+    //     p2.v_x = -1 * (p2.v_x / 2)
+    //     p2.v_y = -1 * (p2.v_y / 2)
+        
+
+    // }
+}
+
+function handle_collisions(){
+   update_collision_map()
+}
+
+const handle_collisions_t = new Task(
+    50,
+    handle_collisions
+)
+
+const update_velocity_t = new Task(
     50,
     update_v
 )
 
-tasks.push(update_velocity)
+tasks.push(handle_collisions_t)
+tasks.push(update_velocity_t)
 
 document.addEventListener("DOMContentLoaded", () => {
     //Input Event Listeners
@@ -213,8 +321,12 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(`Screen inner width: ${window.innerWidth}, inner height: ${window.innerHeight}`)
 
     var canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
-    canvas_object.width = canvas_dm.width;
-    canvas_object.height = canvas_dm.height;
+    canvas_object.width = canvas_dm.width
+    canvas_object.height = canvas_dm.height
+
+    grid_x = canvas_object.width / 8
+    grid_y = canvas_object.height / 8
+
     console.log(`New canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
 
     var inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
@@ -234,6 +346,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     points = [p0, p1, p2, p3]
 
+    // for access by id, important for arb pt creation and collision detection
+    point_map.set(0, 0)
+    point_map.set(1, 1)
+    point_map.set(2, 2)
+    point_map.set(3, 3)
+
     // var innerHTML = document.getElementById("entityList").innerHTML
     for (var i = 0; i < points.length; i++){
         let velocity = (points[i].v_x ** 2.0 + points[i].v_y ** 2.0) ** 0.5
@@ -241,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("entityList").innerHTML += ` <div id=p${points[i].id} style="background-color:${color}" class="entity"> 
         <div class="entityData">
             <div> 
-                P${points[i].id}: 
+                P${points[i].id} (${points[i].color}): 
             </div>
             <div id="v${points[i].id}">
                 ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy}> 
@@ -278,6 +396,8 @@ document.addEventListener("DOMContentLoaded", () => {
             canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
             canvas_object.width = canvas_dm.width;
             canvas_object.height = canvas_dm.height;
+            grid_x = canvas_object.width / 8
+            grid_y = canvas_object.height / 8
             console.log(`New canvas dimensions: ${canvas_dm.width} by ${canvas_dm.height}`)
             for (let i = 0; i < points.length; i++) {
                 points[i].update_rad(canvas_object.width, canvas_object.height)
