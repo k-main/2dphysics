@@ -8,6 +8,7 @@ var air_res_coeff = 0
 var a_y = -9.8
 var dt = 0.1
 var suspend = false
+const grid_subdivisions = 6
 
 var collision_map = new Map()
 var grid_x, grid_y
@@ -51,7 +52,7 @@ class Point {
         this.color = color
         this.update_rad(canvw, canvh)
         this.cell_id = -1
-        this.mass = (mass > 0) ? mass : Math.PI * (this.rad ** 2)
+        this.mass = (mass > 0) ? mass : 5 * Math.PI * (this.rad ** 2)
 
     }
 
@@ -123,8 +124,10 @@ function create_pt(){
 function delete_pt(id){
     document.getElementById(`p${id}`).remove()
     var found = false;
+    var pt_cell;
     for (var i = 0; i < points.length; i++) {
         if (found == false && points[i].id == id){
+            pt_cell = points[i].cell_id
             points.splice(i , 1)
             found = true
             i -= 1
@@ -134,7 +137,17 @@ function delete_pt(id){
             document.getElementById(`p${points[i].id}`).style.backgroundColor = color
         }
     }
+    
+    var cell = collision_map.get(pt_cell)
+    for (var i = 0; i < cell.length; i++) {
+        if (cell[i] == id) {
+            cell.splice(i, 1)
+            collision_map.set(pt_cell, cell)
+            break;
+        }
+    }
 
+    point_map.delete(id)
 }
 
 function toggle_air_res(){
@@ -262,7 +275,7 @@ function detect_collisions(){
                 for (var k = 0; k < points_in_cell.length; k++){    // worst: points[i].length, best: 0,  
                     var pt_id = points_in_cell[k]
                     if (point_map.has(pt_id)) {
-                        exec_collision(i, point_map.get(pt_id))
+                        collide(i, point_map.get(pt_id))
                     }
                 }
 
@@ -275,28 +288,36 @@ function detect_collisions(){
     
 }
 
-function exec_collision(p1_i, p2_i){
-    // var p1 = points[p1_i], p2 = points[p2_i]
-    // const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
-    // const r1 = p1.rad, r2 = p2.rad;
-    // if ((r1 + r2) > d) {
-    //     let p1vx = p1.v_x
-    //     let p1vy = p1.v_y
-    //     p1.v_x += p2.v_x / 2
-    //     p2.v_y += p2.v_y / 2
-    //     p2.v_x = -1 * (p2.v_x / 2)
-    //     p2.v_y = -1 * (p2.v_y / 2)
-        
+function collide(p1_i, p2_i){
+    if (p1_i ==  p2_i) return
+    // if (!collision_map.has(p1_i) || !collision_map.has(p2_i)) return
+    try {
+        var p1 = points[p1_i], p2 = points[p2_i]
+        const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
+        const r1 = p1.rad, r2 = p2.rad;
+        if ((r1 + r2) > d - 10) {
+            let p1vx = p1.v_x
+            let p1vy = p1.v_y
+            p1.v_x = p2.v_x * ( p2.mass / p1.mass ) ** 0.5        
+            p1.v_y = p2.v_y * ( p2.mass / p1.mass ) ** 0.5
+            p2.v_x = p1vx * ( p1.mass / p2.mass ) ** 0.5
+            p2.v_y = p1vy * ( p1.mass / p2.mass ) ** 0.5
+        }
 
-    // }
+            points[p1_i] = p1
+            points[p2_i] = p2
+    } catch (error) {
+
+    }
 }
 
 function handle_collisions(){
    update_collision_map()
+   detect_collisions()
 }
 
 const handle_collisions_t = new Task(
-    50,
+    10,
     handle_collisions
 )
 
@@ -324,8 +345,8 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas_object.width = canvas_dm.width
     canvas_object.height = canvas_dm.height
 
-    grid_x = canvas_object.width / 8
-    grid_y = canvas_object.height / 8
+    grid_x = canvas_object.width / grid_subdivisions
+    grid_y = canvas_object.height / grid_subdivisions
 
     console.log(`New canvas width: ${canvas_object.width}, height: ${canvas_object.height}`)
 
@@ -396,8 +417,8 @@ document.addEventListener("DOMContentLoaded", () => {
             canvas_dm = get_canvas_dm(window.innerWidth, window.innerHeight)
             canvas_object.width = canvas_dm.width;
             canvas_object.height = canvas_dm.height;
-            grid_x = canvas_object.width / 8
-            grid_y = canvas_object.height / 8
+            grid_x = canvas_object.width / grid_subdivisions
+            grid_y = canvas_object.height / grid_subdivisions
             console.log(`New canvas dimensions: ${canvas_dm.width} by ${canvas_dm.height}`)
             for (let i = 0; i < points.length; i++) {
                 points[i].update_rad(canvas_object.width, canvas_object.height)
