@@ -114,7 +114,7 @@ function create_pt(){
     document.getElementById('entityList').innerHTML += `
         <div id=p${point_id} style="background-color:${bg_color}" class="entity"> 
             <div class="entityData">
-                <div> P${point_id}: </div> 
+                <div> P${point_id} (${c}): </div> 
                 <div id="v${point_id}">  </div> 
             </div>
             <button class="del" id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
@@ -212,7 +212,7 @@ function update_v(){
             document.getElementById(`v${points[i].id}`).innerHTML = 
             `
             <div>  |V| = ${Math.round(velocity)} m/s </div>
-            <div> v = <${v_x},${v_y}>, x = <${points[i].grid_x},${points[i].grid_y}> = ${points[i].cell_id} </div>
+            <div> v = <${v_x},${v_y}> </div>
             `
         } catch (error) {
             console.log(`Error updating point with id ${points[i].id}, ${error}`)
