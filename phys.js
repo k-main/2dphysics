@@ -115,13 +115,13 @@ function create_pt(){
         <div id=p${point_id} style="background-color:${bg_color}" class="entity"> 
             <div class="entityData">
                 <div> P${point_id} (${c}): </div> 
-                <div id="v${point_id}">  </div> 
+                <div id="v${point_id}"> </div> 
             </div>
             <button class="del" id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
         </div>
     `
 }
-
+// point map needs to be updated when this function is called, otw it wont work
 function delete_pt(id){
     document.getElementById(`p${id}`).remove()
     var found = false;
@@ -133,6 +133,7 @@ function delete_pt(id){
             found = true
             i -= 1
         } else if (found == true) {
+            point_map.set(points[i].id, i)
             var color = (i % 2 == 0) ? `#e1e1e1` : 'white'
             console.log(`P${points[i].id} is now ${color}`)
             document.getElementById(`p${points[i].id}`).style.backgroundColor = color
@@ -381,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 P${points[i].id} (${points[i].color}): 
             </div>
             <div id="v${points[i].id}">
-                ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy}> 
+                ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy} > 
             </div> 
         </div>
             <button class="del" id="class="del" del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
