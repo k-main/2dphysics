@@ -316,17 +316,17 @@ function handle_collisions(){
    detect_collisions()
 }
 
-const handle_collisions_t = new Task(
-    10,
-    handle_collisions
-)
+// const handle_collisions_t = new Task(
+//     10,
+//     handle_collisions
+// )
 
 const update_velocity_t = new Task(
     50,
     update_v
 )
 
-tasks.push(handle_collisions_t)
+// tasks.push(handle_collisions_t)
 tasks.push(update_velocity_t)
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -394,7 +394,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var current_inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
     function simulate(){
-
         // Handle tasks
         frame_i += 1
         for (var i = 0; i < tasks.length; i++){
@@ -456,6 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
             points[i] = p_i
         }
 
+        handle_collisions()
         requestAnimationFrame(simulate)
     }
 
