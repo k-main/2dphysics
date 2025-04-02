@@ -6,7 +6,7 @@ var tasks = []
 /* Sim Params */
 var air_res_coeff = 0
 var a_y = -9.8
-var dt = 0.1
+var dt = 0.03
 var suspend = false
 const grid_subdivisions = 6
 const max_pts = 15
