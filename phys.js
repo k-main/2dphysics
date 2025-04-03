@@ -300,8 +300,6 @@ function collide(p1_i, p2_i){
         
         const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
         if ((p1.rad + p2.rad) > d) {
-            console.log(`collision between ${p1.id} and ${p2.id}`)
-            
             if (active_collisions.has(p1.id ^ p2.id)) {
                 return
             } else {
