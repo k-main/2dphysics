@@ -54,7 +54,7 @@ class Point {
         this.color = color
         this.update_rad(canvw, canvh)
         this.cell_id = -1
-        this.mass = (mass > 0) ? mass : 5 * Math.PI * (this.rad ** 2)
+        this.mass = (mass > 0) ? mass : Math.PI * (this.rad ** 2)
 
     }
 
@@ -72,15 +72,15 @@ class Point {
 
 function get_canvas_dm(inner_w, inner_h){
     if (inner_w >= 1440) {
-        return {"width": 700, "height": 500}
+        return {"width": 600, "height": 600}
     }
     if (inner_w >= 1280) {
-        return {"width": 600, "height": 500}
+        return {"width": 600, "height": 600}
     }
     if (inner_w >= 800) {
-        return {"width": 600, "height": 400}
+        return {"width": 500, "height": 500}
     }
-    return {"width": inner_w * 0.8, "height": inner_h * 0.4}
+    return {"width": inner_w * 0.5, "height": inner_h * 0.5}
 } 
 
 function cartesian_y(canvas_y, canvas_height){
@@ -106,6 +106,9 @@ function create_pt(){
     Vy = (Vy_f != '') ? Number(Vy_f) : 100
     r = (r_f != '') ? Number(r_f) : 10
     c = (c_f != '') ? c_f : 'blue'
+
+    const r_lim = Math.min(grid_x, grid_y);
+    r = (2 * r > r_lim) ? r_lim / 2 : r
 
     const point_id = (points.length != 0) ? points[points.length - 1].id + 1 : 0
     points.push(new Point(point_id, x, y, r, c, Vx, Vy, canvas_object.width, canvas_object.height))
@@ -297,15 +300,15 @@ function collide(p1_i, p2_i){
     try {
         var p1 = points[p1_i], p2 = points[p2_i]
 
-        
         const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
+        // d + 0.25*Math.min(p1.rad, p2.rad)
         if ((p1.rad + p2.rad) > d) {
             if (active_collisions.has(p1.id ^ p2.id)) {
                 return
             } else {
                 active_collisions.set(p1.id ^ p2.id, 1)
             }
-
+            console.log(`Collision between ${p1.id}, ${p2.id}`)
             let p1vx = p1.v_x
             let p1vy = p1.v_y
 
@@ -373,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const p0 = new Point( 0, (canvas_object.width / 2), (canvas_object.height / 2), 20, 'blue', 20, -20, canvas_object.width, canvas_object.height)
     const p1 = new Point( 1, (canvas_object.width / 2), (canvas_object.height / 2), 5, 'orange', 50, 20, canvas_object.width, canvas_object.height)
     const p2 = new Point( 2, (canvas_object.width / 2) + 20, (canvas_object.height / 2) + 20, 8, 'green', 20, 80, canvas_object.width, canvas_object.height)
-    const p3 = new Point( 3, (canvas_object.width / 2) - 20, (canvas_object.height / 2) - 20, 3, 'red', 100, 80, canvas_object.width, canvas_object.height)
+    const p3 = new Point( 3, (canvas_object.width / 2) - 20, (canvas_object.height / 2) - 20, 6, 'red', 100, 80, canvas_object.width, canvas_object.height)
 
     points = [p0, p1, p2, p3]
 
