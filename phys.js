@@ -296,10 +296,17 @@ function collide(p1_i, p2_i){
     // if (!collision_map.has(p1_i) || !collision_map.has(p2_i)) return
     try {
         var p1 = points[p1_i], p2 = points[p2_i]
+
+        
         const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
-        const r1 = p1.rad, r2 = p2.rad;
-        if ((r1 + r2) > d - 5) {
+        if ((p1.rad + p2.rad) > d) {
             console.log(`collision between ${p1.id} and ${p2.id}`)
+            
+            if (active_collisions.has(p1.id ^ p2.id)) {
+                return
+            } else {
+                active_collisions.set(p1.id ^ p2.id, 1)
+            }
 
             let p1vx = p1.v_x
             let p1vy = p1.v_y
@@ -310,6 +317,10 @@ function collide(p1_i, p2_i){
             p2.v_y = p1vy * ( p1.mass / p2.mass ) ** 0.5
             points[p1_i] = p1
             points[p2_i] = p2
+        } else if ((p1.rad + p2.rad) <= d) {
+            if (active_collisions.has(p1.id ^ p2.id)) {
+                active_collisions.delete(p1.id ^ p2.id)
+            }
         }
 
     } catch (error) {
