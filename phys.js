@@ -6,7 +6,7 @@ var tasks = []
 /* Sim Params */
 var air_res_coeff = 0
 var a_y = -9.8
-var dt = 0.03
+var dt = 0.1
 var suspend = false
 const grid_subdivisions = 6
 const max_pts = 15
@@ -297,6 +297,8 @@ function collide(p1_i, p2_i){
         var p1 = points[p1_i], p2 = points[p2_i]
         const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
         const r1 = p1.rad, r2 = p2.rad;
+
+
         if ((r1 + r2) > d - 5) {
 
             let p1vx = p1.v_x
@@ -429,22 +431,22 @@ document.addEventListener("DOMContentLoaded", () => {
             p_i.x = p_i.x + p_i.v_x*dt
             p_i.y = p_i.y + p_i.v_y*dt
             
-            if (p_i.x + p_i.rad >= canvas_object.width) {
+            if (p_i.x + p_i.radx >= canvas_object.width) {
                 p_i.v_x = -p_i.v_x
-                p_i.x = canvas_object.width - p_i.rad
+                p_i.x = canvas_object.width - p_i.radx
             }
-            if (p_i.x - p_i.rad <= 0) {
+            if (p_i.x - p_i.radx <= 0) {
                 p_i.v_x = -p_i.v_x
-                p_i.x = p_i.rad
+                p_i.x = p_i.radx
             }
 
-            if (p_i.y + p_i.rad >= canvas_object.height){
+            if (p_i.y + p_i.rady >= canvas_object.height){
                 p_i.v_y = -p_i.v_y
-                p_i.y = canvas_object.height - p_i.rad
+                p_i.y = canvas_object.height - p_i.rady
             }
-            if (p_i.y - p_i.rad <= 0){
+            if (p_i.y - p_i.rady <= 0){
                 if (p_i.v_y != 0) p_i.v_y = -p_i.v_y
-                p_i.y = p_i.rad
+                p_i.y = p_i.rady
             }
 
             let air_res = air_res_coeff*(Math.PI * p_i.rad)
