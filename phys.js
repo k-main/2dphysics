@@ -12,6 +12,7 @@ const grid_subdivisions = 6
 const max_pts = 15
 
 var collision_map = new Map()
+var active_collisions = new Map()
 var grid_x, grid_y
 
 class Task {
@@ -297,9 +298,8 @@ function collide(p1_i, p2_i){
         var p1 = points[p1_i], p2 = points[p2_i]
         const d = ((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2) ** 0.5
         const r1 = p1.rad, r2 = p2.rad;
-
-
         if ((r1 + r2) > d - 5) {
+            console.log(`collision between ${p1.id} and ${p2.id}`)
 
             let p1vx = p1.v_x
             let p1vy = p1.v_y
@@ -308,10 +308,10 @@ function collide(p1_i, p2_i){
             p1.v_y = p2.v_y * ( p2.mass / p1.mass ) ** 0.5
             p2.v_x = p1vx * ( p1.mass / p2.mass ) ** 0.5
             p2.v_y = p1vy * ( p1.mass / p2.mass ) ** 0.5
-        }
-
             points[p1_i] = p1
             points[p2_i] = p2
+        }
+
     } catch (error) {
 
     }
