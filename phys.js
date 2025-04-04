@@ -72,15 +72,15 @@ class Point {
 
 function get_canvas_dm(inner_w, inner_h){
     if (inner_w >= 1440) {
-        return {"width": 600, "height": 600}
+        return {"width": 700, "height": 500}
     }
     if (inner_w >= 1280) {
-        return {"width": 600, "height": 600}
+        return {"width": 600, "height": 500}
     }
     if (inner_w >= 800) {
-        return {"width": 500, "height": 500}
+        return {"width": 600, "height": 400}
     }
-    return {"width": inner_w * 0.5, "height": inner_h * 0.5}
+    return {"width": inner_w * 0.8, "height": inner_h * 0.4}
 } 
 
 function cartesian_y(canvas_y, canvas_height){
