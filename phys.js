@@ -71,14 +71,23 @@ class Point {
 }
 
 function get_canvas_dm(inner_w, inner_h){
-    if (inner_w >= 1440) {
-        return {"width": 700, "height": 500}
+    
+    if (inner_w >= 2560) {
+        const w = 0.25 * inner_w;
+        const h = (5 / 6) * w;
+        return {"width": w, "height": h}
     }
-    if (inner_w >= 1280) {
-        return {"width": 600, "height": 500}
+
+    if (inner_w >= 1920) {
+        const w = 0.33 * inner_w;
+        const h = (5 / 6) * w;
+        return {"width": w, "height": h}
     }
+
     if (inner_w >= 800) {
-        return {"width": 500, "height": 400}
+        const w = 0.45 * inner_w;
+        const h = (5 / 6) * w;
+        return {"width": w, "height": h}
     }
     return {"width": inner_w * 0.8, "height": inner_h * 0.4}
 } 
@@ -308,7 +317,6 @@ function collide(p1_i, p2_i){
             } else {
                 active_collisions.set(p1.id ^ p2.id, 1)
             }
-            console.log(`Collision between ${p1.id}, ${p2.id}`)
             let p1vx = p1.v_x
             let p1vy = p1.v_y
 
@@ -431,7 +439,8 @@ document.addEventListener("DOMContentLoaded", () => {
             canvas_object.height = canvas_dm.height;
             grid_x = canvas_object.width / grid_subdivisions
             grid_y = canvas_object.height / grid_subdivisions
-            console.log(`New canvas dimensions: ${canvas_dm.width} by ${canvas_dm.height}`)
+            // console.log(`New canvas dimensions: ${canvas_dm.width} by ${canvas_dm.height}`)
+            console.log(`inner = ${window.innerWidth}x${window.innerHeight}, canvas = ${canvas_object.width}x${canvas_object.height}`)
             for (let i = 0; i < points.length; i++) {
                 points[i].update_rad(canvas_object.width, canvas_object.height)
             }
