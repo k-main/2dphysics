@@ -10,42 +10,37 @@
 <body>
     <div class="container">
         <div id="pageHeading">2-Dimensional Physics Simulator</div>
-            <div id="windowEntity">
                 <canvas id="Window"></canvas>
                 
-                <div id="entityList">
-                    <p class="settingHeader">Entities</p>
+                <div id="params">
+                    <div class="settingHeader">Simulation Settings</div>
+                    <button id="air-res" class="Button"> Toggle Air-Resistance </button>
+                    <button id="gravity" class="Button"> Toggle Gravity </button>
+                    <button id="agitate" class="Button"> Agitate Simulation </button>
+                    <button id="pause" class="Button">Pause</button>
                 </div>
-            </div>
 
-        <div id="paramsAndEntity">
-            <form id="params">
-                <div class="settingHeader">Simulation Parameters</div>
-                <button id="air-res" class="Button"> Toggle Air-Resistance </button>
-                <button id="gravity" class="Button"> Toggle Gravity </button>
-                <button id="agitate" class="Button"> Agitate Simulation </button>
-                <button id="pause" class="Button">Pause</button>
-            </form>
+                <div id="entitiesTitle" class="settingHeader">Entities</div>
+                <div id="entityList">
+                </div>
 
-            <form id="entityForm">
-                <div class="settingHeader">Create Point-Mass</div>
-                <div class="settingDesc">Leave blank to use default</div>
-                <label for="origin"> Starting X Position </label>
-                <input type="text" class="textentry" id="x0" name="origin"> 
-                <label for="origin"> Starting Y Position </label>
-                <input type="text" class="textentry" id="y0" name="origin"> 
-                <label for="v_x"> Horizontal Velocity (Vx) </label>
-                <input type="text" class="textentry" id="v_x" name="v_x"> 
-                <label for="v_y"> Vertical Velocity (Vy) </label>
-                <input type="text" class="textentry" id="v_y" name="v_y"> 
-                <label for="radius"> Radius </label>
-                <input type="text" class="textentry" id="radius" name="radius"> 
-                <label for="color"> Color </label>
-                <input type="text" class="textentry" id="color" name="color"> 
-                <button id="createPt" class="Button" type="submit"> Create </button>
-            </form>
-        </div>
 
+                <div id="createPointMass" class="settingHeader">Create Point-Mass </div>
+                <form id="entityForm">
+                    <label for="origin"> Starting X Position </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="x0" name="origin"> 
+                    <label for="origin"> Starting Y Position </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="y0" name="origin"> 
+                    <label for="v_x"> Horizontal Velocity (Vx) </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="v_x" name="v_x"> 
+                    <label for="v_y"> Vertical Velocity (Vy) </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="v_y" name="v_y"> 
+                    <label for="radius"> Radius </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="radius" name="radius"> 
+                    <label for="color"> Color </label>
+                    <input type="text" placeholder="Leave blank for default." class="textentry" id="color" name="color"> 
+                    <button id="createPt" class="Button" type="submit"> Create </button>
+                </form>
 
     </div>
 </body>

@@ -78,7 +78,7 @@ function get_canvas_dm(inner_w, inner_h){
         return {"width": 600, "height": 500}
     }
     if (inner_w >= 800) {
-        return {"width": 600, "height": 400}
+        return {"width": 500, "height": 400}
     }
     return {"width": inner_w * 0.8, "height": inner_h * 0.4}
 } 
