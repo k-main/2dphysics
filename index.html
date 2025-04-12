@@ -10,23 +10,27 @@
 <body>
     <div class="container">
         <div id="pageHeading">2-Dimensional Physics Simulator</div>
-                <canvas id="Window"></canvas>
-                
-                <div id="params">
-                    <div class="settingHeader">Simulation Settings</div>
-                    <button id="air-res" class="Button"> Toggle Air-Resistance </button>
-                    <button id="gravity" class="Button"> Toggle Gravity </button>
-                    <button id="agitate" class="Button"> Agitate Simulation </button>
-                    <button id="pause" class="Button">Pause</button>
+                <div class="canvasAndParams">
+
+                    <canvas id="Window"></canvas>
+                    <div id="params">
+                        <div class="settingHeader">Simulation Settings</div>
+                        <button id="air-res" class="Button"> Toggle Air-Resistance </button>
+                        <button id="gravity" class="Button"> Toggle Gravity </button>
+                        <button id="agitate" class="Button"> Agitate Simulation </button>
+                        <button id="pause" class="Button">Pause</button>
+                    </div>
+
+                </div>
+                    
+                <div id="entityListAndForm"> 
+                    <div id="entityList">
+                    <div id="entitiesTitle" class="settingHeader">Entities</div>
                 </div>
 
-                <div id="entitiesTitle" class="settingHeader">Entities</div>
-                <div id="entityList">
-                </div>
 
-
-                <div id="createPointMass" class="settingHeader">Create Point-Mass </div>
                 <form id="entityForm">
+                    <div id="createPointMass" class="settingHeader">Create Point-Mass </div>
                     <label for="origin"> Starting X Position </label>
                     <input type="text" placeholder="Leave blank for default." class="textentry" id="x0" name="origin"> 
                     <label for="origin"> Starting Y Position </label>
@@ -41,7 +45,7 @@
                     <input type="text" placeholder="Leave blank for default." class="textentry" id="color" name="color"> 
                     <button id="createPt" class="Button" type="submit"> Create </button>
                 </form>
-
+            </div>
     </div>
 </body>
 </html>

@@ -9,7 +9,7 @@ var a_y = -9.8
 var dt = 0.1
 var suspend = false
 const grid_subdivisions = 6
-const max_pts = 15
+const max_pts = 25
 
 var collision_map = new Map()
 var active_collisions = new Map()
@@ -72,20 +72,9 @@ class Point {
 
 function get_canvas_dm(inner_w, inner_h){
     
-    if (inner_w >= 2560) {
-        const w = 0.25 * inner_w;
-        const h = (5 / 6) * w;
-        return {"width": w, "height": h}
-    }
-
-    if (inner_w >= 1920) {
-        const w = 0.33 * inner_w;
-        const h = (5 / 6) * w;
-        return {"width": w, "height": h}
-    }
 
     if (inner_w >= 800) {
-        const w = 0.45 * inner_w;
+        const w = 450;
         const h = (5 / 6) * w;
         return {"width": w, "height": h}
     }
@@ -130,7 +119,7 @@ function create_pt(){
                 <div> P${point_id} (${c}): </div> 
                 <div id="v${point_id}"> </div> 
             </div>
-            <button class="del" id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
+            <button class="Button" id=del_${point_id} onClick="delete_pt(${point_id})">Delete</button>
         </div>
     `
 }
@@ -320,7 +309,7 @@ function collide(p1_i, p2_i){
             let p1vx = p1.v_x
             let p1vy = p1.v_y
 
-            p1.v_x = p2.v_x * ( p2.mass / p1.mass ) ** 0.5        
+            p1.v_x = p2.v_x * ( p2.mass / p1.mass ) ** 0.5    
             p1.v_y = p2.v_y * ( p2.mass / p1.mass ) ** 0.5
             p2.v_x = p1vx * ( p1.mass / p2.mass ) ** 0.5
             p2.v_y = p1vy * ( p1.mass / p2.mass ) ** 0.5
@@ -407,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy} > 
             </div> 
         </div>
-            <button class="del" id="class="del" del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
+            <button class="Button" id="class="del" del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
         </div>`
     }
 

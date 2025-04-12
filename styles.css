@@ -3,275 +3,178 @@
     flex-direction: column;
     align-items: center;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    height: 90vh;
+    height: 100vh;
     width: 100%;
-}
+    border-left: 1px solid #e1e1e1b1;
+    border-right: 1px solid #e1e1e1b1;
+    background-color: white;
 
-#pageHeading {
-    padding: 20px;
-    font-weight: bold;
-    font-size: large;
-}
-
-
-#Window {
-    border: 1px solid black;
-}
-
-#simParams {
-    width: 80%;
-}
-
-#paramsAndEntity > * {
-    margin-bottom: 5%;
-}
-
-#entityForm {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-}
-
-#entityForm > * {
-    margin-top: 2%;
-    padding: 2%;
-}
-
-#createPt {
-    margin-top: 6%;
-    margin-bottom: 6%;
-    padding: 4%;
-}
-
-.Button {
-    padding: 6px;
-    margin-bottom: 15px;
-
-}
-
-#params {
-    display: flex;
-    flex-direction: column;
-    margin-top: 4%;
-    width: 90%;
-}
-
-#params > * {
-    margin: 3% 0%;
-    padding: 4%;
-}
-
-.settingHeader {
-    font-weight: bold;
-    padding-top: 8px;
-    text-align: center;
-}
-
-
-#entityList {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    height: 100%;
-}
-
-
-.entity {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    min-width: 50%;
-    padding: 2%;
-    margin: 4px 0px;
-    border-radius: 3px;
-}
-
-
-.entityData {
-    display: flex;
-    flex-direction: column;
-}
-
-.del {
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-@media screen and (min-width: 800px){
-
-    .container {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        grid-template-rows: 1fr 8fr 1fr 4fr 4fr;
-        /* grid-template-rows: repeat(10, 1fr); */
-    }
-
-    #pageHeading {
-        text-align: center;
-        grid-row: 1 / 1;
-        grid-column: 3 / 7;
-    }
-
-    #Window {
-        grid-row: 2 / 2;
-        grid-column: 2 / 4;
-    }
-    #params {
-        grid-row: 2 / 2;
-        grid-column: 6 / 8;
-        height: 100%;
-        margin: 0% 6%;
+    .Button {
+        padding: 5%;
+        background-color: white;
+        border: 1px solid #e1e1e181;
+        border-radius: 5px;
+        box-shadow: 1px 1px #e1e1e1;
     }
 
     .settingHeader {
+        font-weight: bold;
+        padding-top: 8px;
         text-align: center;
-        margin-top: 5%;
     }
 
-    #createPointMass{
-        grid-row: 3 / 3;
-        grid-column: 6 / 8;
+    #pageHeading {
+        padding: 20px;
+        font-weight: bold;
+        font-size: large;
     }
 
-    #entitiesTitle {
-        grid-row: 3 / 3;
-        grid-column: 1 / 5;
-    }
-
-    #entityList{
+    .canvasAndParams {
+        display: flex;
         align-items: center;
-        grid-row: 4 / 4;
-        grid-column: 1 / 6;
-        margin: 0% 2%;
-        height:100%;
-        overflow-y: scroll;
-    }
+        flex-direction: column;
 
-    #entityForm{
-        grid-row: 4 / 4;
-        grid-column: 5 / 9;
-        margin-top: 4%;
+        #Window {
+            border: 1px solid black;
+        }
+
+        #params {
+            display: flex;
+            flex-direction: column;
+            margin-top: 4%;
+            width: 90%;
+        }
+        
+        #params > * {
+            margin: 3% 0%;
+            padding: 4%;
+        }
+
+    }
+    #entityListAndForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 80px;
         width: 100%;
+    #entityList {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
         height: 100%;
-    }
 
-    #entityForm >* {
-        margin: 0%;
-    }
+        .entity {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            min-width: 50%;
+            padding: 2%;
+            margin: 4px 0px;
+            border-radius: 3px;
+            border: 1px solid #e1e1e1;
+            box-shadow: 3px 3px #e1e1e1b1;
 
-    #entityList{
-        width: 75%;
-        margin-top: 5%;
-    }
+            .entityData {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .del {
+                border-radius: 4px;
+                font-weight: bold;
+            }
 
+            .Button {
+                box-shadow: none;
+            }
 
-    .entity {
-        border: #e1e1e1 solid 1px;
-    }
-
-    .entity > * {
-        margin: 0px 5px;
-    }
-
-    .del {
-        padding: 2px 8px;
-    }
-
-    #createPt {
-        margin-top: 4%;
-    }
-
-}
-
-@media screen and (min-width: 1280px){
-
-    .container {
-        /* gap: 50px 0px; */
-        grid-template-rows: 5fr 15fr 2fr 15fr 2fr;
-    }
-
-
-
-    #Window {
-        grid-column: 2 / 4;
-    }
-
-    #params {
-        grid-column: 6 / 8;
-        box-shadow: 4px 4px #e1e1e1;
-        border: 1px solid #e1e1e1;
-        border-radius: 5px;
-        align-items: center;
-        height: 80%;
-    }
-    
-    #params > *{
-        width: 80%;
-    }
-
-    #createPointMass{
-        grid-column: 6 / 6;
-    }
-
-    #entitiesTitle {
-        grid-column: 2 / 5;
-        width: 100%;
-        height: 50%;
-        /* border: 1px solid black; */
-    }
-
-    #entityList{
-        margin-top: 2%;
-        grid-column: 2 / 5;
-        width: 100%;
-        overflow-y: scroll;
-    }
-
-    #entityList > * {
-        box-shadow: 2px 2px #c8c8c8;
-        width: 80%;
+        }
     }
 
     #entityForm {
-        grid-column: 5 / 8;
-        margin-top: 5%;
-        box-shadow: 5px 5px #e1e1e1;
-        border: 1px solid #e1e1e1;
-        border-radius: 5px;
-        align-items: center;
-    }
+        display: flex;
+        flex-direction: column;
+        width: 90%;
 
-    #entityForm > * {
-        width: 80%;
-    }
-}
+        #createPt {
+            margin-top: 6%;
+            margin-bottom: 6%;
+            padding: 4%;
+        }
 
-@media screen and (min-width: 1440px){
+    }
     
-    .container{
-        grid-template-rows: 3fr 15fr 2fr 15fr 2fr;
-    }
-
-    #params {
-        height: 82%;
+    #entityForm > * {
+        margin-top: 2%;
+        padding: 2%;
     }
 }
 
-@media screen and (min-width: 1920px) {
+}
 
+@media screen and (min-width: 800px) {
+    /* border: 1px solid black; */
+    .container {
+        width: 800px;
+        .canvasAndParams {
+            flex-direction: row;
+            width: 750px;
+            #params {
+                height: 375px;
+                align-items: center;
+            }
+            #params > * {
+                width: 280px;
+            }
+        }
+        #entityListAndForm {
+            flex-direction: row;
+            width: 750px;
+            height: 600px;
+            #entityList {
+                width: 350px;
+                overflow-y: scroll;
+                #entitiesTitle {
+                    margin-bottom: 25px;
+                }
+                .entity {
+                    width: 330px;
+                }
+            }
+            #entityForm {
+                margin-top: 25px;
+                margin-left: 50px;
+                max-width: 350px;
+            }
+        }
+    }
+}
+
+
+@media screen and (min-width: 1280px) {
     body {
         display: flex;
         justify-content: center;
-    }
-    .container {
-        width: 80%;
-    }
+        .container {
+            width: 1280px;
+            .canvasAndParams {
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                margin-top: 50px;
+                width: 1000px;
 
-}
+                #params {
+                    width: 300px;
+                    align-items: center;
+                    margin-top: 0px;
+                    margin-left: 80px;
+                }
+                #params > * {
+                    width: 280px;
+                }
 
-
-@media screen and (min-width: 2560px) {
-    .container {
-        width: calc(0.6*100vw);
+            }
+        }
     }
 }
