@@ -1,4 +1,4 @@
-var points
+var points = []
 var point_map = new Map()
 var frame_i = 0
 var canvas_object
@@ -9,7 +9,7 @@ var a_y = -9.8
 var dt = 0.1
 var suspend = false
 const grid_subdivisions = 6
-const max_pts = 25
+const max_pts = 35
 
 var collision_map = new Map()
 var active_collisions = new Map()
@@ -85,7 +85,7 @@ function cartesian_y(canvas_y, canvas_height){
     return (canvas_height - canvas_y)
 }
 
-
+const rand_colors = ['red', 'green', 'blue', 'orange', 'black'];
 function create_pt(){
     if (points.length > max_pts) return;
 
@@ -98,12 +98,12 @@ function create_pt(){
     r_f  = document.getElementById("radius").value
     c_f  = document.getElementById("color").value
 
-    x = (x_f != '') ? Number(x_f) : 100
-    y = (y_f != '') ? Number(y_f) : 100
-    Vx = (Vx_f != '') ? Number(Vx_f) : 100
-    Vy = (Vy_f != '') ? Number(Vy_f) : 100
-    r = (r_f != '') ? Number(r_f) : 10
-    c = (c_f != '') ? c_f : 'blue'
+    x = (x_f != '') ? Number(x_f) : Math.random()*canvas_object.width
+    y = (y_f != '') ? Number(y_f) : Math.random()*canvas_object.height
+    Vx = (Vx_f != '') ? Number(Vx_f) : Math.random()*200
+    Vy = (Vy_f != '') ? Number(Vy_f) : Math.random()*200
+    r = (r_f != '') ? Number(r_f) : Math.round(Math.max(Math.random()*15, 8));
+    c = (c_f != '') ? c_f : rand_colors[Math.round(Math.random()*(rand_colors.length - 1))];
 
     const r_lim = Math.min(grid_x, grid_y);
     r = (2 * r > r_lim) ? r_lim / 2 : r
@@ -369,38 +369,8 @@ document.addEventListener("DOMContentLoaded", () => {
         canvas.fill()
         canvas.closePath()
     }
-    
-    const p0 = new Point( 0, (canvas_object.width / 2), (canvas_object.height / 2), 20, 'blue', 20, -20, canvas_object.width, canvas_object.height)
-    const p1 = new Point( 1, (canvas_object.width / 2), (canvas_object.height / 2), 5, 'orange', 50, 20, canvas_object.width, canvas_object.height)
-    const p2 = new Point( 2, (canvas_object.width / 2) + 20, (canvas_object.height / 2) + 20, 8, 'green', 20, 80, canvas_object.width, canvas_object.height)
-    const p3 = new Point( 3, (canvas_object.width / 2) - 20, (canvas_object.height / 2) - 20, 6, 'red', 100, 80, canvas_object.width, canvas_object.height)
 
-    points = [p0, p1, p2, p3]
-
-    // for access by id, important for arb pt creation and collision detection
-    point_map.set(0, 0)
-    point_map.set(1, 1)
-    point_map.set(2, 2)
-    point_map.set(3, 3)
-
-    // var innerHTML = document.getElementById("entityList").innerHTML
-    for (var i = 0; i < points.length; i++){
-        let velocity = (points[i].v_x ** 2.0 + points[i].v_y ** 2.0) ** 0.5
-        let color = (i % 2 == 0) ? '#e1e1e1' : 'white'
-        document.getElementById("entityList").innerHTML += ` <div id=p${points[i].id} style="background-color:${color}" class="entity"> 
-        <div class="entityData">
-            <div> 
-                P${points[i].id} (${points[i].color}): 
-            </div>
-            <div id="v${points[i].id}">
-                ${Math.round(velocity)} m/s | <${points[i].vx},${points[i].vy} > 
-            </div> 
-        </div>
-            <button class="Button" id="class="del" del_${points[i].id}" onClick="delete_pt(${points[i].id})">Delete</button> 
-        </div>`
-    }
-
-
+    for (var i = 0; i < 15; i++) create_pt()
 
     var current_inner_dm = {"width" : window.innerWidth, "height" : window.innerHeight}
     function simulate(){
